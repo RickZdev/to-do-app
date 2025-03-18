@@ -12,7 +12,7 @@ import BottomSheet from "@gorhom/bottom-sheet";
 
 import { COLORS } from "@/utils";
 import { useTaskStore } from "@/store";
-import { useGenerateTask } from "@/hooks/";
+import { useFilteredTasks, useGenerateTask, useSearchQuery } from "@/hooks/";
 import {
   CreateTaskModal,
   EmptyPlaceholder,
@@ -31,7 +31,6 @@ const TaskListScreen = () => {
 
   // zustand store
   const {
-    tasks,
     selectedTasks,
     addTask,
     removeTask,
@@ -41,10 +40,15 @@ const TaskListScreen = () => {
     deleteSelectedTasks,
   } = useTaskStore();
 
+  // custom hooks
+  const { tasksNotComplete } = useFilteredTasks(params.category);
+  const { searchQuery, setSearchQuery, searchableList } = useSearchQuery({
+    tasks: tasksNotComplete,
+  });
+
   // tanstack query
   const { refetch } = useGenerateTask();
 
-  const [searchQuery, setSearchQuery] = useState<string>(""); // 🔍 Search Query
   const [isSelectOpen, setIsSelectOpen] = useState<boolean>(false);
   const bottomSheetRef = useRef<BottomSheet>(null);
 
@@ -62,7 +66,6 @@ const TaskListScreen = () => {
     // I first fetched the API by pressing the "Generate Task" button,
     // then retrieved all the responses.
     // After that, I stored all the responses in my Zustand state.
-
     const response = await refetch();
     const data = response?.data?.data;
 
@@ -100,20 +103,6 @@ const TaskListScreen = () => {
       onPress: handlePresentModalPress,
     },
   ];
-
-  const tasksByCategory = tasks
-    .filter((task) => task.category === params?.category)
-    .reverse();
-
-  const tasksNotComplete = tasksByCategory.filter(
-    (task) => task.completed === false
-  );
-
-  const searchableList = searchQuery.trim()
-    ? tasksNotComplete.filter((task) =>
-        task.title.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    : tasksNotComplete;
 
   // reset selectedTasks state upon mount
   useEffect(() => {
@@ -165,6 +154,7 @@ const TaskListScreen = () => {
             ListFooterComponent={<View style={styles.footer} />}
             contentContainerStyle={styles.taskList}
             ListEmptyComponent={() => <EmptyPlaceholder />}
+            keyboardDismissMode={"on-drag"}
             renderItem={({ item }) => (
               <View style={styles.taskCardContainer}>
                 {/* Checkbox for Selection */}

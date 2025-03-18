@@ -6,14 +6,13 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 import { categories } from "@/static";
 import { COLORS } from "@/utils";
-import { useTaskStore } from "@/store";
+import { useFilteredTasks } from "@/hooks";
 import { CategoryCard, TaskCard, EmptyPlaceholder } from "@/components";
 
 const CurrentTasksScreen = () => {
-  const { tasks } = useTaskStore();
+  const { recentTasks } = useFilteredTasks();
   const tabBarHeight = useBottomTabBarHeight();
 
-  const filteredTasks = [...tasks].reverse().slice(0, 5);
   const avatarSize = 60;
   const username = "John Doe";
 
@@ -73,7 +72,7 @@ const CurrentTasksScreen = () => {
         <View style={styles.recentTaskListContainer}>
           <FlatList
             nestedScrollEnabled={false}
-            data={filteredTasks}
+            data={recentTasks}
             keyExtractor={(item) => item.id.toString()}
             showsVerticalScrollIndicator={false}
             ListEmptyComponent={() => <EmptyPlaceholder />}
