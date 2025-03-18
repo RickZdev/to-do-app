@@ -4,23 +4,15 @@ import { Text } from "react-native-paper";
 import Animated, { LinearTransition } from "react-native-reanimated";
 
 import { COLORS } from "@/utils";
-import { useTaskStore } from "@/store";
 import { EmptyPlaceholder, SearchBarTextInput, TaskCard } from "@/components";
+import { useFilteredTasks, useSearchQuery } from "@/hooks";
 
 const CompletedTasksScreen = () => {
-  const { tasks } = useTaskStore();
+  const { tasksCompleted } = useFilteredTasks();
 
-  const [searchQuery, setSearchQuery] = useState<string>("");
-
-  const tasksCompleted = tasks
-    .filter((task) => task.completed === true)
-    .reverse();
-
-  const searchableList = searchQuery.trim()
-    ? tasksCompleted.filter((task) =>
-        task.title.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    : tasksCompleted;
+  const { searchQuery, setSearchQuery, searchableList } = useSearchQuery({
+    tasks: tasksCompleted,
+  });
 
   return (
     <View style={styles.container}>
@@ -47,6 +39,7 @@ const CompletedTasksScreen = () => {
           renderItem={({ item }) => (
             <TaskCard task={item} showActionButton={false} />
           )}
+          keyboardDismissMode={"on-drag"}
         />
       </View>
     </View>

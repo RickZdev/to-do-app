@@ -2,7 +2,14 @@ import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";
 
 import React from "react";
-import { View, StyleSheet, Keyboard } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+} from "react-native";
 import { Text, TextInput, Button } from "react-native-paper";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 
@@ -42,80 +49,85 @@ const CreateTaskForm = ({ category }: CreateTaskFormPropType) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Controller
-        name="title"
-        control={control}
-        rules={{ required: "Title is required" }}
-        render={({
-          field: { onChange, onBlur, value },
-          fieldState: { error },
-        }) => (
-          <>
-            <TextInput
-              label="Title"
-              placeholder="Enter a title"
-              value={value}
-              onChangeText={onChange}
-              onBlur={onBlur}
-              style={styles.input}
-            />
-            {error?.message && (
-              <Text variant="bodyMedium" style={styles.errorText}>
-                {error.message}
-              </Text>
-            )}
-          </>
-        )}
-      />
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={{ flexGrow: 1 }}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 280 : 0} // A
+    >
+      <ScrollView contentContainerStyle={styles.container}>
+        <Controller
+          name="title"
+          control={control}
+          rules={{ required: "Title is required" }}
+          render={({
+            field: { onChange, onBlur, value },
+            fieldState: { error },
+          }) => (
+            <>
+              <TextInput
+                label="Title"
+                placeholder="Enter a title"
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                style={styles.input}
+              />
+              {error?.message && (
+                <Text variant="bodyMedium" style={styles.errorText}>
+                  {error.message}
+                </Text>
+              )}
+            </>
+          )}
+        />
 
-      <Controller
-        name="description"
-        control={control}
-        rules={{ required: "Description is required" }}
-        render={({
-          field: { onChange, onBlur, value },
-          fieldState: { error },
-        }) => (
-          <>
-            <TextInput
-              label="Description"
-              mode="flat"
-              placeholder="Enter a description"
-              value={value}
-              onChangeText={onChange}
-              onBlur={onBlur}
-              error={!!error}
-              multiline
-              numberOfLines={4}
-              style={[styles.input, styles.textArea]}
-              underlineColor="transparent"
-            />
-            {error?.message && (
-              <Text variant="bodyMedium" style={styles.errorText}>
-                {error.message}
-              </Text>
-            )}
-          </>
-        )}
-      />
-
-      {/* Submit Button */}
-      <Button
-        onPress={handleSubmit(submit)}
-        style={styles.button}
-        labelStyle={styles.buttonLabel}
-      >
-        Submit
-      </Button>
-    </View>
+        <Controller
+          name="description"
+          control={control}
+          rules={{ required: "Description is required" }}
+          render={({
+            field: { onChange, onBlur, value },
+            fieldState: { error },
+          }) => (
+            <>
+              <TextInput
+                label="Description"
+                mode="flat"
+                placeholder="Enter a description"
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                error={!!error}
+                multiline
+                numberOfLines={4}
+                style={[styles.input, styles.textArea]}
+                underlineColor="transparent"
+              />
+              {error?.message && (
+                <Text variant="bodyMedium" style={styles.errorText}>
+                  {error.message}
+                </Text>
+              )}
+            </>
+          )}
+        />
+        {/* Submit Button */}
+        <Button
+          onPress={handleSubmit(submit)}
+          style={styles.button}
+          labelStyle={styles.buttonLabel}
+        >
+          Submit
+        </Button>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: COLORS.WHITE,
-    flex: 1,
+    flexGrow: 1,
     justifyContent: "space-between",
     padding: 20,
     borderRadius: 10,
@@ -130,7 +142,7 @@ const styles = StyleSheet.create({
   },
   textArea: {
     flex: 1,
-    minHeight: 80,
+    minHeight: 180,
   },
   errorText: {
     color: COLORS.DELETE,
