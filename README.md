@@ -1,6 +1,45 @@
-# Welcome to your Expo app 👋
+# 📌 React Native To-Do App (Tech Exam)
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A feature-rich to-do application built with **React Native** and **Expo CLI**, leveraging modern state management, data fetching, form handling, and task persistence. 
+
+It features a **clean, neat, and simple UI** using **Expo CLI** and **expo-router**.  
+This app is optimized to **build and run smoothly on both iOS and Android devices**.  
+
+## 🚀 Features  
+- ✅ Add a new task  
+- ✅ Delete a single task  
+- ✅ Delete multiple tasks at once  
+- ✅ Mark a task as completed  
+- ✅ Persist tasks using AsyncStorage  
+- ✅ Search functionality to quickly find tasks  
+- ✅ View recent tasks (5 tasks at a time)  
+- ✅ Separate tab for completed tasks  
+- ✅ Categorized tasks (General, Projects, Study, etc.) for better organization  
+- ✅ Fetch and generate 3 to-do tasks from an API request  
+
+## 🛠️ Tech Stack  
+This project is built using:  
+
+- **Framework:** React Native (via Expo CLI)  
+- **Navigation:** expo-router  
+- **State Management:** Zustand  
+- **Data Fetching & Caching:** TanStack Query  
+- **Form Handling:** React Hook Form  
+- **HTTP Client:** Axios  
+- **Storage:** AsyncStorage for persisting tasks  
+
+## 🔗 API  
+This app fetches and manages data using **JSONPlaceholder**:  
+[https://jsonplaceholder.typicode.com/todos](https://jsonplaceholder.typicode.com/todos)  
+
+It retrieves **3 to-do tasks** dynamically from the API to prepopulate the task list.  
+
+## 📂 Installation & Setup  
+
+1. **Clone the repository**  
+   ```sh
+   git clone https://github.com/your-repo-name.git
+   cd your-repo-name
 
 ## Get started
 
